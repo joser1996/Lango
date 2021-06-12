@@ -1,0 +1,16 @@
+{
+  "name": "langoproject",
+  "version": "1.0.0",
+  "description": "Study and learn new words in a new language",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Makaveli",
+  "license": "ISC",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react": "^6.24.1",
+    "express": "^4.17.1"
+  }
+}
