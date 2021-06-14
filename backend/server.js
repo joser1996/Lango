@@ -105,7 +105,7 @@ app.get('/auth/redirect',
 	 */
 	function (req, res) {
 	    console.log('Logged in and using cookies!')
-	    res.redirect('/user/lang.html');
+	    res.redirect('/user/lango.html');
 	}
 );
 
@@ -147,7 +147,7 @@ function isAuthenticated(req, res, next) {
 	console.log("Req.user:",req.user);
 	next();
     } else {
-	res.redirect('/loginReact.html');  // change to main page !!!!!!!!!!!!!
+	res.redirect('/login.html');
 	// Browser to go to login page
     }
 }
