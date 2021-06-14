@@ -134,7 +134,7 @@ function gotProfile(accessToken, refreshToken, profile, done) {
     console.log("firstName: ", fName);
     console.log("lastName: ", lName);
     console.log("UserID: ", userIdentification); 
-    done(null); 
+    done(null, userIdentification); 
 }
 
 
@@ -153,7 +153,30 @@ function isAuthenticated(req, res, next) {
 }
 
 
+/* Part of Server's sesssion set-up.  
+ * The second operand of "done" becomes the input to deserializeUser
+ * on every subsequent HTTP request with this session's cookie.
+ */
+passport.serializeUser((dbID, done) => {
+	console.log("In serialize user. ID: ", dbID);
+	console.log();
+	done(null, dbID);
+});
+
+/* Called by passport.session pipeline stage on every HTTP request with
+ * a current session cookie. 
+ * Where we should lookup user database info. 
+ * Whatever we pass in the "done" callback becomes req.user
+ * and can be used by subsequent middleware.
+ */
+passport.deserializeUser((dbID, done) => {
+	console.log("In deserialize user.");
+	console.log();
+	done(null, dbID);
+});
+
 function printURL (req, res, next) {
     console.log(req.url);
+	console.log()
     next();
 }
