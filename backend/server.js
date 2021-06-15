@@ -4,16 +4,16 @@ const express = require("express");
 const passport = require("passport");
 const GoogleStrategy = require('passport-google-oauth20');
 const cookieSession = require('cookie-session');
-
-
+const dotenv = require("dotenv");
+dotenv.config();
 
 //Variables
-const hostName = "localhost";
-const port = 8000;
+// const hostName = "localhost";
+// const port = 8000;
 
 const app = express();
-app.listen(port, hostName, () => {
-    console.log(`Listening at http://${hostName}:${port}`);
+app.listen(process.env.PORT, process.env.HOST, () => {
+    console.log(`Listening at http://${process.env.HOST}:${process.env.PORT}`);
 });
 
 /***************************Log in stuff**********************************/
@@ -26,8 +26,8 @@ app.listen(port, hostName, () => {
  * server162.site:[port]/auth/redirect
  */
 const googleLoginData = {
-    clientID: '334402565352-50ptaigepmc37e8ccq8psc25gbos913q.apps.googleusercontent.com',
-    clientSecret: 'KqwGbQz0tvWHjP0COBygPZ9A',
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
     callbackURL: '/auth/redirect'
 };
 
