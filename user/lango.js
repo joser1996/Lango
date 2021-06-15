@@ -8,7 +8,7 @@ function logo(props) {
     );
 }
 
-function langoHeader(props) {
+function LangoHeader(props) {
     return React.createElement(
         "header",
         { id: "langoHeader" },
@@ -29,7 +29,7 @@ function langoHeader(props) {
     );
 }
 
-function firstCard(props) {
+function FirstCard(props) {
     return React.createElement(
         "div",
         { id: "textCard" },
@@ -41,7 +41,7 @@ function firstCard(props) {
     );
 }
 
-function firstInputCard(props) {
+function FirstInputCard(props) {
     return React.createElement(
         "div",
         { id: "inputTextCard" },
@@ -49,7 +49,7 @@ function firstInputCard(props) {
     );
 }
 
-function saveButton(props) {
+function SaveButton(props) {
     return React.createElement(
         "button",
         { className: "butt", onClick: storeWord },
@@ -57,7 +57,7 @@ function saveButton(props) {
     );
 }
 
-function langoFooter(props) {
+function LangoFooter(props) {
     return React.createElement(
         "footer",
         null,
@@ -69,43 +69,43 @@ function langoFooter(props) {
     );
 }
 
-function cardsDiv(props) {
+function CardsDiv(props) {
     return React.createElement(
         "div",
         { id: "cardsDiv" },
-        React.createElement("firstInputCard", null),
-        React.createElement("firstCard", null)
+        React.createElement(FirstInputCard, null),
+        React.createElement(FirstCard, null)
     );
 }
 
-function buttonDiv(props) {
+function ButtonDiv(props) {
     return React.createElement(
         "div",
         { id: "buttonDIv" },
-        React.createElement("saveButton", null)
+        React.createElement(SaveButton, null)
     );
 }
 
-function mainBody(props) {
+function MainBody(props) {
     return React.createElement(
         "main",
         { id: "langoMain" },
-        React.createElement("cardsDiv", null),
-        React.createElement("buttonDiv", null)
+        React.createElement(CardsDiv, null),
+        React.createElement(ButtonDiv, null)
     );
 }
 
-function master(props) {
+function Master(props) {
     return React.createElement(
         "div",
         { id: "masterDiv" },
-        React.createElement("langoHeader", null),
-        React.createElement("mainBody", null),
-        React.createElement("langoFooter", null)
+        React.createElement(LangoHeader, null),
+        React.createElement(MainBody, null),
+        React.createElement(LangoFooter, null)
     );
 }
 
-ReactDOM.render(master, document.getElementById("root"));
+ReactDOM.render(Master(), document.getElementById("root"));
 /**************************Helper Functions*****************************/
 
 function checkReturn() {

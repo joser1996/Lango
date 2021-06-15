@@ -6,7 +6,7 @@ function logo(props) {
     );
 }
 
-function langoHeader(props) {
+function LangoHeader(props) {
     return(
         <header id="langoHeader">
             <div id="startDiv">
@@ -17,7 +17,7 @@ function langoHeader(props) {
     );
 }
 
-function firstCard(props) {
+function FirstCard(props) {
     return(
         <div id="textCard">
             <p id="firstCard">""</p>
@@ -25,7 +25,7 @@ function firstCard(props) {
     );
 }
 
-function firstInputCard(props) {
+function FirstInputCard(props) {
     return(
         <div id="inputTextCard">
             <textarea id="firstCardInput" onKeyPress={checkReturn}></textarea>
@@ -33,13 +33,13 @@ function firstInputCard(props) {
     );
 }
 
-function saveButton(props) {
+function SaveButton(props) {
     return(
         <button className="butt" onClick={storeWord}>Save</button>
     );
 }
 
-function langoFooter(props) {
+function LangoFooter(props) {
     return(
         <footer>
             <p id="langoUser">Big Chungus</p>
@@ -47,44 +47,44 @@ function langoFooter(props) {
     );
 }
 
-function cardsDiv(props) {
+function CardsDiv(props) {
     return(
         <div id="cardsDiv">
-            <firstInputCard />
-            <firstCard />
+            <FirstInputCard />
+            <FirstCard />
         </div>
     );
 }
 
-function buttonDiv(props) {
+function ButtonDiv(props) {
     return(
         <div id="buttonDIv">
-            <saveButton />
+            <SaveButton />
         </div>
     );
 }
 
-function mainBody(props) {
+function MainBody(props) {
     return(
         <main id="langoMain">
-            <cardsDiv />
-            <buttonDiv />
+            <CardsDiv />
+            <ButtonDiv />
         </main>
     );
 }
 
-function master(props) {
+function Master(props) {
     return(
         <div id="masterDiv">
-            <langoHeader />
-            <mainBody />
-            <langoFooter />
+            <LangoHeader />
+            <MainBody />
+            <LangoFooter />
         </div>
     );
 }
 
 
-ReactDOM.render(master, document.getElementById("root"));
+ReactDOM.render(Master(), document.getElementById("root"));
 /**************************Helper Functions*****************************/
 
 function checkReturn() {
