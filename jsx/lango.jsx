@@ -9,10 +9,8 @@ function logo(props) {
 function LangoHeader(props) {
     return(
         <header id="langoHeader">
-            <div id="startDiv">
-                <button id="startButton">Start Review</button>
-                <h1>Lango!</h1>
-            </div>
+            <button id="startButton">Start Review</button>
+            <h1 id="langoLogo">Lango!</h1>
         </header>
     );
 }
@@ -58,7 +56,7 @@ function CardsDiv(props) {
 
 function ButtonDiv(props) {
     return(
-        <div id="buttonDIv">
+        <div id="buttonDiv">
             <SaveButton />
         </div>
     );

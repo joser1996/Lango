@@ -13,18 +13,14 @@ function LangoHeader(props) {
         "header",
         { id: "langoHeader" },
         React.createElement(
-            "div",
-            { id: "startDiv" },
-            React.createElement(
-                "button",
-                { id: "startButton" },
-                "Start Review"
-            ),
-            React.createElement(
-                "h1",
-                null,
-                "Lango!"
-            )
+            "button",
+            { id: "startButton" },
+            "Start Review"
+        ),
+        React.createElement(
+            "h1",
+            { id: "langoLogo" },
+            "Lango!"
         )
     );
 }
@@ -81,7 +77,7 @@ function CardsDiv(props) {
 function ButtonDiv(props) {
     return React.createElement(
         "div",
-        { id: "buttonDIv" },
+        { id: "buttonDiv" },
         React.createElement(SaveButton, null)
     );
 }
