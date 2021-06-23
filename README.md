@@ -11,11 +11,11 @@ are unfamiliar with.
 ## Projcet Status: **Ongoing**
 
 ## Technology Used:
-Front End: React
-Back End: Node.js
-DataBase: SQLite
-User Authentication Via Google
-Google Translate APIs
+Front End: React  
+Back End: Node.js  
+DataBase: SQLite  
+User Authentication Via Google  
+Google Translate APIs  
 
 ## How to Install
 *To Do*
