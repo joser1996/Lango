@@ -33,7 +33,8 @@ function CORSRequest() {
             console.log("Res Object: ", object);
             let japanese = document.getElementById("firstCard");
             let userName = document.getElementById("langoUser");
-            japanese.textContent = object.japanes;
+            japanese.innerHTML = object.japanese;
+            console.log("object: ", object)
         }
     };
 

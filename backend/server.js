@@ -225,8 +225,8 @@ function translateHandler(req, res, next) {
                 } else {
                     console.log("In Japanese", APIResBody.data.translations[0].translatedText);
                     let response = {
-                        "English": word,
-                        "Japanese":APIResBody.data.translations[0].translatedText
+                        "english": word,
+                        "japanese":APIResBody.data.translations[0].translatedText
                     };
                     res.json(response);
                 }
