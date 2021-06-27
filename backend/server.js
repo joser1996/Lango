@@ -4,8 +4,11 @@ const express = require("express");
 const passport = require("passport");
 const GoogleStrategy = require('passport-google-oauth20');
 const cookieSession = require('cookie-session');
+const APIRequest = require("request");
+
 const dotenv = require("dotenv");
 dotenv.config();
+
 
 //Variables
 // const hostName = "localhost";
@@ -115,6 +118,12 @@ app.get('/user/*',
 	express.static('.') // serving files that start with /user from here gets them from
 );
 
+/****************Backend Requests **********************************************/
+
+app.get('/user/translate', translateHandler);
+
+
+
 
 /*******************************End login stuff*************************************/
 
@@ -179,4 +188,52 @@ function printURL (req, res, next) {
     console.log(req.url);
 	console.log()
     next();
+}
+
+/**************************Handlers***********************************/
+function translateHandler(req, res, next) {
+    let queryObject = req.query;
+    console.log("translateHandler: Object: ", queryObject);
+    let url = process.env.API_URL + process.env.API_KEY
+    console.log(url);
+    if(queryObject.english != undefined) {
+        let word = queryObject.english;
+        let requestObj = {
+            "source": "en",
+            "target": "ja",
+            "q": [word]
+        };
+        console.log("English Phrase: ", requestObj.q[0]);
+
+        APIRequest(
+            {
+                url: url,
+                method: "POST",
+                headers: {"content-type": "application/json"},
+                json: requestObj
+            },
+            APICallback
+        );
+
+        function APICallback(err, APIResHead, APIResBody) {
+            if(err || (APIResHead.statusCode != 200)) {
+                console.log("Got an API error!");
+                console.log(APIResBody);
+            } else {
+                if(APIResHead.error) {
+                    console.log(APIResHead.error);
+                } else {
+                    console.log("In Japanese", APIResBody.data.translations[0].translatedText);
+                    let response = {
+                        "English": word,
+                        "Japanese":APIResBody.data.translations[0].translatedText
+                    };
+                    res.json(response);
+                }
+            }
+        }// END APICallBack
+
+    } else {
+        next();
+    }
 }

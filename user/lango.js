@@ -104,8 +104,11 @@ function Master(props) {
 ReactDOM.render(Master(), document.getElementById("root"));
 /**************************Helper Functions*****************************/
 
-function checkReturn() {
-    console.log("In checkReturn");
+function checkReturn(event) {
+    console.log(event.charCode);
+    if(event.charCode === 13) {
+        CORSRequest();
+    }
 }
 
 function storeWord() {
