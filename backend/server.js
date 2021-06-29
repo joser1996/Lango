@@ -37,8 +37,11 @@ const DB = new sqlite3.Database(dbPath, function(err) {
     DB.exec(dbSchema, function(err) {
         if (err) {
             console.log("Failed to run schema: " + err);
+        } else {
+            console.log("No Error");
         }
     });
+    console.log("Done");
 });
 
 
