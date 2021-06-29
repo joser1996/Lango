@@ -5,14 +5,45 @@ const passport = require("passport");
 const GoogleStrategy = require('passport-google-oauth20');
 const cookieSession = require('cookie-session');
 const APIRequest = require("request");
+const sqlite3 = require('sqlite3').verbose();
+
 
 const dotenv = require("dotenv");
 dotenv.config();
 
+//database stuff start
+const dbSchema = `
+CREATE TABLE IF NOT EXISTS Cards (
+    id INTEGER PRIMARY KEY NOT NULL,
+    word_one TEXT NOT NULL,
+    word_two TEXT NOT NULL
+);
+`
 
-//Variables
-// const hostName = "localhost";
-// const port = 8000;
+const DB = new sqlite3.Database('../database/sqlite.db', function(err) {
+    if (err) {
+        console.log("Failed to load DB: " + process.env.DB_PATH +" " + err);
+        return;
+    }
+    console.log("Connected to " + process.env.DB_PATH + ' database.');
+    DB.exec('PRAGMA foreign_keys=ON;', function(error) {
+        if (error) {
+            console.error("Failed to enable foreign keys.");
+        } else {
+            console.log("Enabled foreign key enforecement.")
+        }
+    });
+
+    DB.exec(dbSchema, function(err) {
+        if (err) {
+            console.log("Failed to run schema: " + err);
+        }
+    });
+});
+
+
+
+//database stuff end
 
 const app = express();
 app.listen(process.env.PORT, process.env.HOST, () => {
