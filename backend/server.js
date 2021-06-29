@@ -6,7 +6,7 @@ const GoogleStrategy = require('passport-google-oauth20');
 const cookieSession = require('cookie-session');
 const APIRequest = require("request");
 const sqlite3 = require('sqlite3').verbose();
-
+const path = require('path');
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS Cards (
     word_two TEXT NOT NULL
 );
 `
-
-const DB = new sqlite3.Database('../database/sqlite.db', function(err) {
+const dbPath = path.resolve(__dirname, process.env.DB_PATH);
+const DB = new sqlite3.Database(dbPath, function(err) {
     if (err) {
         console.log("Failed to load DB: " + process.env.DB_PATH +" " + err);
         return;
