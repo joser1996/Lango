@@ -259,8 +259,8 @@ passport.deserializeUser((dbID, done) => {
     let localUserCMD = findUserCMD + dbID;
     let userData = {
         id: "someId",
-        firstName: "fName",
-        lastName: "lName"
+        first_name: "fName",
+        last_name: "lName"
     };
     console.log("About to get DB")
     DB.get(localUserCMD, (err, row) => {
@@ -272,15 +272,15 @@ passport.deserializeUser((dbID, done) => {
             console.log(row);
             userData = {
                 id: row.id,
-                firstName: row.first_name,
-                lastName: row.last_name
+                first_name: row.first_name,
+                last_name: row.last_name
             };
             //were not in here
-            //done(null, userData);
+            done(null, userData);
         }
     });
     console.log("Do I make it here");
-    done(null, userData);
+    //done(null, userData);
 
 });
 
@@ -341,10 +341,8 @@ function translateHandler(req, res, next) {
 function storeHandler(req, res, next) {
     let url = req.url;
     let qObj = req.query;
-    const cmdI = `
-    INSERT INTO FlashCards (user_id, word_one, word_two, seen, correct) VALUES (@0, @1, @2, 0, 0);
-    `
-    console.log("User: " + req.user);
+    const cmdI = "INSERT INTO FlashCards (user_id, word_one, word_two, seen, correct) VALUES (@0, @1, @2, 0, 0);"
+    console.log("User: " + Object.keys(req.user));
     if((qObj.english != undefined) && (qObj.japanese != undefined)) {
         DB.run(cmdI, req.user.id, qObj.english, qObj.japanese, insertCallback);
         res.json("Attempting to store data!");
