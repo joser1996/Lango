@@ -48,7 +48,7 @@ function FirstInputCard(props) {
 function SaveButton(props) {
     return React.createElement(
         "button",
-        { className: "butt", onClick: storeWord },
+        { className: "butt", onClick: storeWords },
         "Save"
     );
 }

@@ -13,11 +13,21 @@ dotenv.config();
 
 //database stuff start
 const dbSchema = `
-CREATE TABLE IF NOT EXISTS Cards (
-    id INTEGER PRIMARY KEY NOT NULL,
-    word_one TEXT NOT NULL,
-    word_two TEXT NOT NULL
+CREATE TABLE IF NOT EXISTS Users(
+    id INT PRIMARY KEY NOT NULL,
+    first_name TEXT,
+    last_name TEXT
 );
+
+CREATE TABLE IF NOT EXISTS FlashCards (
+    user_id INT NOT NULL,
+    word_one TEXT NOT NULL,
+    word_two TEXT NOT NULL,
+    seen INT,
+    correct INT,
+        FOREIGN KEY (user_id) REFERENCES Users(id)
+);
+
 `
 const dbPath = path.resolve(__dirname, process.env.DB_PATH);
 const DB = new sqlite3.Database(dbPath, function(err) {
@@ -80,6 +90,13 @@ passport.use( new GoogleStrategy(googleLoginData, gotProfile) );
 
 // pipeline stage that just echos url, for debugging
 app.use("/", printURL)
+
+app.get('/test', testDB);
+function testDB(req, res, next) {
+    console.log("Testing")
+    dumpDB();
+    res.json({done: true});
+}
 
 /* Check validity of cookies at the beginning of pipeline
  * Will get cookies out of request, decrypt and check if 
@@ -156,43 +173,66 @@ app.get('/user/*',
 
 app.get('/user/translate', translateHandler);
 
+app.get('/user/store', storeHandler);
+
 
 
 
 /*******************************End login stuff*************************************/
+// function to check whether user is logged when trying to access
+// personal data
+function isAuthenticated(req, res, next) {
+	//console.log(req);
+    console.log("In isAuthenticated")
+    if (req.user) {
+        //console.log("req.session:",req.session);
+        console.log("req.user:",req.user);
+        next();
+    } else {
+        res.redirect('/login.html');
+        // Browser to go to login page
+    }
+}
+
 
 /* function called during login, the second time passport.authenticate
  * is called (in /auth/redirect/),
  * once we actually have the profile data from Google.
  */ 
 function gotProfile(accessToken, refreshToken, profile, done) {
-    console.log("Google profile",profile);
-    let fName = profile.name.givenName;
-    let lName = profile.name.familyName;
-    let userIdentification = profile.id; 
+    console.log("Got Profile");
+    //get info from google profile
+    let first_name = profile.name.givenName;
+    let last_name = profile.name.familyName;
+    let userId = parseInt(profile.id, 10); 
+
     // here is a good place to check if user is in DB,
     // and to store him in DB if not already there. 
     // Second arg to "done" will be passed into serializeUser,
     // should be key to get user out of database.
-    console.log("firstName: ", fName);
-    console.log("lastName: ", lName);
-    console.log("UserID: ", userIdentification); 
-    done(null, userIdentification); 
-}
+    console.log("first_name: ", first_name);
+    console.log("last_name: ", last_name);
+    console.log("UserID: ", userId); 
 
+    let localUserCMD = "SELECT * FROM Users WHERE id = " + userId +";";
+    DB.get(localUserCMD, userCallback);
 
-// function to check whether user is logged when trying to access
-// personal data
-function isAuthenticated(req, res, next) {
-	//console.log(req);
-    if (req.user) {
-	console.log("Req.session:",req.session);
-	console.log("Req.user:",req.user);
-	next();
-    } else {
-	res.redirect('/login.html');
-	// Browser to go to login page
+    function userCallback(err, row) {
+        let userInsert = 'INSERT into Users (id, first_name, last_name) VALUES (@0, @1, @2);';
+        if(err) {
+            console.log("Error in gotProfile");
+            console.log("got: ", row, "\n");
+        } else if (row != undefined) {
+            console.log("User is already in DB\n\n");
+            console.log("row: ", row, "\n");
+        } else {
+            //user is not in the DB
+            console.log("STRING??: ", userId);
+            DB.run(userInsert, userId, first_name, last_name, insertCallback);
+        }
     }
+    let rowId = userId;
+    done(null, rowId); 
 }
 
 
@@ -213,9 +253,35 @@ passport.serializeUser((dbID, done) => {
  * and can be used by subsequent middleware.
  */
 passport.deserializeUser((dbID, done) => {
-	console.log("In deserialize user.");
+	console.log("In deserialize user. ID: ", dbID);
 	console.log();
-	done(null, dbID);
+    let findUserCMD = 'SELECT * FROM Users WHERE id = '
+    let localUserCMD = findUserCMD + dbID;
+    let userData = {
+        id: "someId",
+        firstName: "fName",
+        lastName: "lName"
+    };
+    console.log("About to get DB")
+    DB.get(localUserCMD, (err, row) => {
+        if(err) {
+            return console.error("error: ", err);
+        } else if(row) {
+            //not making it here
+            console.log("Got row back\n\n");
+            console.log(row);
+            userData = {
+                id: row.id,
+                firstName: row.first_name,
+                lastName: row.last_name
+            };
+            //were not in here
+            //done(null, userData);
+        }
+    });
+    console.log("Do I make it here");
+    done(null, userData);
+
 });
 
 function printURL (req, res, next) {
@@ -269,5 +335,36 @@ function translateHandler(req, res, next) {
 
     } else {
         next();
+    }
+}
+
+function storeHandler(req, res, next) {
+    let url = req.url;
+    let qObj = req.query;
+    const cmdI = `
+    INSERT INTO FlashCards (user_id, word_one, word_two, seen, correct) VALUES (@0, @1, @2, 0, 0);
+    `
+    console.log("User: " + req.user);
+    if((qObj.english != undefined) && (qObj.japanese != undefined)) {
+        DB.run(cmdI, req.user.id, qObj.english, qObj.japanese, insertCallback);
+        res.json("Attempting to store data!");
+    } else {
+        next();
+    }
+}
+
+function insertCallback(err) {
+    if(err){console.log(err);}
+    else {
+        dumpDB();
+        console.log("\n\n");
+    }
+}
+
+function dumpDB() {
+    DB.all('SELECT * FROM FlashCards', dataCallback);
+    DB.all('SELECT * FROM Users', dataCallback);
+    function dataCallback(err, data) {
+        console.log(data);
     }
 }

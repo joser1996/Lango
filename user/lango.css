@@ -118,7 +118,6 @@ textarea:focus {
 textarea {
     border: none;
     display: block;
-    vertical-align: middle;
 }
 
 #langoMain {
