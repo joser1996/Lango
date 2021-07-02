@@ -82,7 +82,7 @@ function storeWords() {
             alert("Woops, there was an error making the request.");
         };
         japaneseCard.innerHTML = "";
-        englishWord.value = "";
+        englishCard.value = "";
         xhr.send();
     }
 }
