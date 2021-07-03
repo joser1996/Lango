@@ -89,18 +89,13 @@ const googleLoginData = {
 passport.use( new GoogleStrategy(googleLoginData, gotProfile) );
 
 // pipeline stage that just echos url, for debugging
-app.use("/", printURL)
+app.use("/", printURL);
 
-app.get('/test', testDB);
-function testDB(req, res, next) {
-    console.log("Testing")
-    dumpDB();
-    res.json({done: true});
-}
 
 /* Check validity of cookies at the beginning of pipeline
  * Will get cookies out of request, decrypt and check if 
  * session is still going on.
+ * Attatches session property to req
  */ 
 app.use(cookieSession({
     maxAge: 6 * 60 * 60 * 1000, // Six hours in milliseconds
@@ -119,11 +114,10 @@ app.use(passport.initialize());
  */
 app.use(passport.session());
 
-
 // can I find a static file?
 //can load files that are in the public directory
 //anyone can access these
-app.use(express.static('public')); 
+app.use( express.static('public')); 
 
 
 /* next, handler for url that starts login with Google.
@@ -176,7 +170,12 @@ app.get('/user/translate', translateHandler);
 app.get('/user/store', storeHandler);
 
 
-
+app.get('/test', testDB);
+function testDB(req, res, next) {
+    console.log("Testing")
+    dumpDB();
+    res.json({done: true});
+}
 
 /*******************************End login stuff*************************************/
 // function to check whether user is logged when trying to access
@@ -186,7 +185,7 @@ function isAuthenticated(req, res, next) {
     console.log("In isAuthenticated")
     if (req.user) {
         //console.log("req.session:",req.session);
-        console.log("req.user:",req.user);
+        //console.log("req.user:",req.user);
         next();
     } else {
         res.redirect('/login.html');
@@ -210,9 +209,9 @@ function gotProfile(accessToken, refreshToken, profile, done) {
     // and to store him in DB if not already there. 
     // Second arg to "done" will be passed into serializeUser,
     // should be key to get user out of database.
-    console.log("first_name: ", first_name);
-    console.log("last_name: ", last_name);
-    console.log("UserID: ", userId); 
+    // console.log("first_name: ", first_name);
+    // console.log("last_name: ", last_name);
+    // console.log("UserID: ", userId); 
 
     let localUserCMD = "SELECT * FROM Users WHERE id = " + userId +";";
     DB.get(localUserCMD, userCallback);
@@ -221,13 +220,12 @@ function gotProfile(accessToken, refreshToken, profile, done) {
         let userInsert = 'INSERT into Users (id, first_name, last_name) VALUES (@0, @1, @2);';
         if(err) {
             console.log("Error in gotProfile");
-            console.log("got: ", row, "\n");
+            console.log("got: ", err, "\n");
         } else if (row != undefined) {
-            console.log("User is already in DB\n\n");
+            console.log("User is already in DB!\n\n");
             console.log("row: ", row, "\n");
         } else {
             //user is not in the DB
-            console.log("STRING??: ", userId);
             DB.run(userInsert, userId, first_name, last_name, insertCallback);
         }
     }
@@ -286,7 +284,6 @@ passport.deserializeUser((dbID, done) => {
 
 function printURL (req, res, next) {
     console.log(req.url);
-	console.log()
     next();
 }
 
@@ -365,4 +362,14 @@ function dumpDB() {
     function dataCallback(err, data) {
         console.log(data);
     }
+}
+
+function alreadyLoggedIn(req, res, next) {
+    console.log("In already logged in");
+    if(req.user) {
+        res.redirect("/user/lango.html");
+    } else {
+        next();
+    }
+
 }
