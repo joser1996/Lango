@@ -14,7 +14,7 @@ function LangoHeader(props) {
         { id: "langoHeader" },
         React.createElement(
             "button",
-            { id: "startButton" },
+            { id: "startButton", onClick: goToReview },
             "Start Review"
         ),
         React.createElement(
@@ -48,7 +48,7 @@ function FirstInputCard(props) {
 function SaveButton(props) {
     return React.createElement(
         "button",
-        { className: "butt", onClick: storeWords },
+        { className: "butt", onClick: storeWord },
         "Save"
     );
 }
@@ -104,13 +104,14 @@ function Master(props) {
 ReactDOM.render(Master(), document.getElementById("root"));
 /**************************Helper Functions*****************************/
 
-function checkReturn(event) {
-    console.log(event.charCode);
-    if(event.charCode === 13) {
-        CORSRequest();
-    }
+function checkReturn() {
+    console.log("In checkReturn");
 }
 
 function storeWord() {
     console.log("In storeWord");
+}
+
+function goToReview() {
+    console.log("In GO To Review");
 }

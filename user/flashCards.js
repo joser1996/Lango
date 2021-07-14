@@ -1,7 +1,5 @@
 "strict mode";
 
-const { response } = require("express");
-
 function createCORSRequest(method, url) {
     let xhr = new XMLHttpRequest();
     xhr.open(method, url, true);
@@ -85,4 +83,22 @@ function storeWords() {
         englishCard.value = "";
         xhr.send();
     }
+}
+
+function getWords() {
+    let route = "fetch-cards";
+    let xhr = createCORSRequest('GET', route);
+    if(!xhr) {
+        alert("CORS not supported!");
+        return;
+    }
+    xhr.onload = function() {
+        let responseString = xhr.responseText;
+        let object = JSON.parse(responseString)
+        console.log("Get Words Response: ", object);
+        let userName = document.getElementById("reviewName");
+        userName.textContent = object.firstName;
+        updateReview(object.Data);
+    };
+    xhr.send();
 }

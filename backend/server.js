@@ -169,6 +169,8 @@ app.get('/user/translate', translateHandler);
 
 app.get('/user/store', storeHandler);
 
+app.get('/user/fetch-cards', getCards);
+
 
 app.get('/test', testDB);
 function testDB(req, res, next) {
@@ -368,6 +370,32 @@ function alreadyLoggedIn(req, res, next) {
     console.log("In already logged in");
     if(req.user) {
         res.redirect("/user/lango.html");
+    } else {
+        next();
+    }
+
+}
+
+function getCards(req, res, next) {
+    if(req) {
+        let command = 'SELECT * FROM FlashCards';
+        //eventuall filter by userID
+        DB.all(command, getCardsCallback);
+        // let resObject = {
+        //     firstName: req.user.firstName;
+        // };
+
+        function getCardsCallback(err, rowData) {
+            if(err) {
+                console.log("Error::getCards:: ", err);
+            } else {
+                console.log("Data: ", rowData);
+                let resObject = {
+                    Data: rowData
+                };
+                res.json(resObject);
+            }
+        }
     } else {
         next();
     }

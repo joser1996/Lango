@@ -9,7 +9,7 @@ function logo(props) {
 function LangoHeader(props) {
     return(
         <header id="langoHeader">
-            <button id="startButton">Start Review</button>
+            <button id="startButton" onClick={goToReview}>Start Review</button>
             <h1 id="langoLogo">Lango!</h1>
         </header>
     );
@@ -93,3 +93,7 @@ function storeWord() {
     console.log("In storeWord");
 }
 
+function goToReview() {
+    loadReview();
+    getWords();
+}
