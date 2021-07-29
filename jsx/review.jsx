@@ -75,8 +75,8 @@ function checkAns(event) {
 
 function verifyAns() {
     let userAns = document.getElementById("revTextArea");
-    let questionCard = cards[cardIndex].english;
-    let question = document.getElementById("pRev");
+    let questionCard = cards[cardIndex].word_one;
+    let question = document.getElementById("pReview");
     let answer = userAns.value;
     console.log("User Ans: ",answer);
     console.log("Question Card", questionCard)
@@ -102,7 +102,7 @@ function updateReview(data) {
             cardIndex = 0;
         }
         let card = document.getElementById("pReview");
-        card.textContent = data[cardIndex].japanese;
+        card.textContent = data[cardIndex].word_two;
 
         let userInput = document.getElementById("revTextArea");
         userInput.value = "";

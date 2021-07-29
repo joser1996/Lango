@@ -102,3 +102,4 @@ function goToReview() {
 function loadLango() {
     console.log("IN loadLango()")
 }
+
