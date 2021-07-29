@@ -19,3 +19,12 @@ Google Translate APIs
 
 ## How to Install
 *To Do*
+
+## To Do
+* Login page style google login button
+* on Lango homepage center input for text area curson in center
+* Update so actual user name is being displayed
+* Review Logic: flip card and have it automatically move to next one
+* Add ability to select languages
+* Have multiple seperate study decks
+* Work on overall UI/UX 
