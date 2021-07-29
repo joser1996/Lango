@@ -102,3 +102,22 @@ function getWords() {
     };
     xhr.send();
 }
+
+function getUserName() {
+    let url = "getName";
+    let xhr = createCORSRequest("GET", url);
+
+    if(!xhr) {
+        alert("CORS not supported");
+        return;
+    }
+    xhr.onload = function() {
+        let responseStr = xhr.responseText;
+        let object = JSON.parse(responseStr);
+        console.log("Object")
+        let userName = document.getElementById("reviewName")
+        userName.textContent = "Juan"
+    };
+
+    xhr.send();
+}

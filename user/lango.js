@@ -116,3 +116,7 @@ function goToReview() {
     loadReview();
     getWords();
 }
+
+function loadLango() {
+    console.log("IN loadLango()");
+}

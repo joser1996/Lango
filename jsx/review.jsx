@@ -22,8 +22,8 @@ function Main(props) {
             </div>
 
             <div id="reviewInputCard">
-                <textarea id="revTextArea" onKeyPress={checkEnter}>
-                    Good Morning
+                <textarea id="revTextArea" defaultValue="Hello" onKeyPress={checkAns}>
+                
                 </textarea>
             </div>
 
@@ -62,20 +62,40 @@ function loadReview() {
 
 function goToLango() {
     console.log("In goToLango")
+    loadLango();
+    //getUserName();
 }
 
-function checkEnter() {
-    console.log("In check enter")
+function checkAns(event) {
+    console.log(event.charCode);
+    if(event.charCode === 13) {
+        verifyAns();
+    }
 }
 
-function nextCard() {
-    console.log("In next card")
+function verifyAns() {
+    let userAns = document.getElementById("revTextArea");
+    let questionCard = cards[cardIndex].english;
+    let question = document.getElementById("pRev");
+    let answer = userAns.value;
+    console.log("User Ans: ",answer);
+    console.log("Question Card", questionCard)
+
+    if(answer === questionCard) {
+        question.style.color = "green";
+    } else {
+        question.style.color = "red";
+    }
+
+    setTimeout(function(){question.style.color = "black";}, 3000);
 }
+
 
 let cardIndex = 0;
 let cards = null;
 function updateReview(data) {
     if(data) {
+        console.log("Data Recieved: ", data)
         cards = data;
         let maxSize = data.length;
         if(cardIndex == maxSize) {
@@ -86,5 +106,12 @@ function updateReview(data) {
 
         let userInput = document.getElementById("revTextArea");
         userInput.value = "";
+    }
+}
+
+function nextCard() {
+    if(cards) {
+        cardIndex = cardIndex + 1;
+        updateReview(cards)
     }
 }
