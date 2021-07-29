@@ -71,7 +71,7 @@ h1{
 }
 
 #reviewTextCard{
-	background-color: lightgoldenrodyellow;
+	/* background-color: lightgoldenrodyellow; */
 	width: 650px;
 	height: 130px;
 	flex-grow: 1;

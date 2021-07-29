@@ -99,7 +99,10 @@ function goToReview() {
     getWords();
 }
 
+
+
 function loadLango() {
     console.log("IN loadLango()")
+    ReactDOM.render(Master(), document.getElementById("root"))
 }
 
