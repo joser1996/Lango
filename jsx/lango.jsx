@@ -33,7 +33,7 @@ function FirstInputCard(props) {
 
 function SaveButton(props) {
     return(
-        <button className="butt" onClick={storeWord}>Save</button>
+        <button className="butt" onClick={storeWords}>Save</button>
     );
 }
 
@@ -85,12 +85,11 @@ function Master(props) {
 ReactDOM.render(Master(), document.getElementById("root"));
 /**************************Helper Functions*****************************/
 
-function checkReturn() {
-    console.log("In checkReturn");
-}
-
-function storeWord() {
-    console.log("In storeWord");
+function checkReturn(event) {
+    console.log(event.charCode);
+    if(event.charCode === 13) {
+        CORSRequest();
+    }
 }
 
 

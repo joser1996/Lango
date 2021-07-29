@@ -48,7 +48,7 @@ function FirstInputCard(props) {
 function SaveButton(props) {
     return React.createElement(
         "button",
-        { className: "butt", onClick: storeWord },
+        { className: "butt", onClick: storeWords },
         "Save"
     );
 }
@@ -104,12 +104,11 @@ function Master(props) {
 ReactDOM.render(Master(), document.getElementById("root"));
 /**************************Helper Functions*****************************/
 
-function checkReturn() {
-    console.log("In checkReturn");
-}
-
-function storeWord() {
-    console.log("In storeWord");
+function checkReturn(event) {
+    console.log(event.charCode);
+    if (event.charCode === 13) {
+        CORSRequest();
+    }
 }
 
 //loadReview() in review.js
