@@ -112,6 +112,8 @@ function storeWord() {
     console.log("In storeWord");
 }
 
+//loadReview() in review.js
 function goToReview() {
-    console.log("In GO To Review");
+    loadReview();
+    getWords();
 }

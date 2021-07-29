@@ -77,6 +77,38 @@ function Master(props) {
     );
 }
 
+var master = Master();
+/***************************** Helper functions **********************************/
 function loadReview() {
-    ReactDOM.render(React.createElement(Master, null), document.getElementById("root"));
+    console.log("In load Review");
+    ReactDOM.render(master, document.getElementById("root"));
+}
+
+function goToLango() {
+    console.log("In goToLango");
+}
+
+function checkEnter() {
+    console.log("In check enter");
+}
+
+function nextCard() {
+    console.log("In next card");
+}
+
+let cardIndex = 0;
+let cards = null;
+function updateReview(data) {
+    if (data) {
+        cards = data;
+        let maxSize = data.length;
+        if (cardIndex == maxSize) {
+            cardIndex = 0;
+        }
+        let card = document.getElementById("pReview");
+        card.textContent = data[cardIndex].japanese;
+
+        let userInput = document.getElementById("revTextArea");
+        userInput.value = "";
+    }
 }

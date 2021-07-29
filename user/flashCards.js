@@ -97,7 +97,7 @@ function getWords() {
         let object = JSON.parse(responseString)
         console.log("Get Words Response: ", object);
         let userName = document.getElementById("reviewName");
-        userName.textContent = object.firstName;
+        userName.textContent = "Big Chungus";
         updateReview(object.Data);
     };
     xhr.send();
