@@ -52,9 +52,24 @@ function Master(props) {
 
     );
 }
+
+var master = Master()
 /***************************** Helper functions **********************************/
 function loadReview() {
-    ReactDOM.render(<Master />, document.getElementById("root"));
+    console.log("In load Review")
+    ReactDOM.render(master, document.getElementById("root"));
+}
+
+function goToLango() {
+    console.log("In goToLango")
+}
+
+function checkEnter() {
+    console.log("In check enter")
+}
+
+function nextCard() {
+    console.log("In next card")
 }
 
 let cardIndex = 0;

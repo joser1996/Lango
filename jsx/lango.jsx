@@ -93,6 +93,8 @@ function storeWord() {
     console.log("In storeWord");
 }
 
+
+//loadReview() in review.js
 function goToReview() {
     loadReview();
     getWords();

@@ -14,8 +14,8 @@ function loginMaster(props) {
     );
 }
 
-ReactDom.render(loginMaster, document.getElementById('loginRoot'));
+ReactDOM.render(loginMaster(), document.getElementById('loginRoot'));
 
 function loadLogin() {
-    ReactDom.render(loginMaster, document.getElementById('loginRoot'));
+    ReactDOM.render(loginMaster(), document.getElementById('loginRoot'));
 }
