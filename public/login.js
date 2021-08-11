@@ -25,8 +25,23 @@ function loginMaster(props) {
             { id: "rightSide" },
             React.createElement(
                 "a",
-                { href: "auth/google" },
-                " Log In"
+                { href: "auth/google", className: "google-btn" },
+                React.createElement(
+                    "div",
+                    { className: "google-icon-wrapper" },
+                    React.createElement("img", { className: "google-icon",
+                        src: "https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                    })
+                ),
+                React.createElement(
+                    "p",
+                    { "class": "btn-text" },
+                    React.createElement(
+                        "b",
+                        null,
+                        "Sign in with google"
+                    )
+                )
             )
         )
     );
@@ -35,5 +50,5 @@ function loginMaster(props) {
 ReactDOM.render(loginMaster(), document.getElementById('loginRoot'));
 
 function loadLogin() {
-    ReactDOM.render(loginMaster, document.getElementById('loginRoot'));
+    ReactDOM.render(loginMaster(), document.getElementById('loginRoot'));
 }
