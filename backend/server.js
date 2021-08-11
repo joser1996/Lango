@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS FlashCards (
     correct INT,
         FOREIGN KEY (user_id) REFERENCES Users(id)
 );
-
 `
 const dbPath = path.resolve(__dirname, process.env.DB_PATH);
 const DB = new sqlite3.Database(dbPath, function(err) {
@@ -54,9 +53,6 @@ const DB = new sqlite3.Database(dbPath, function(err) {
     console.log("Done");
 });
 
-
-
-//database stuff end
 
 const app = express();
 app.listen(process.env.PORT, process.env.HOST, () => {
@@ -171,19 +167,15 @@ app.get('/user/store', storeHandler);
 
 app.get('/user/fetch-cards', getCards);
 
+app.get('user/getName', fetchNameHandler);
 
 app.get('/test', testDB);
-function testDB(req, res, next) {
-    console.log("Testing")
-    dumpDB();
-    res.json({done: true});
-}
 
+app.use(fileNotFound);
 /*******************************End login stuff*************************************/
 // function to check whether user is logged when trying to access
 // personal data
 function isAuthenticated(req, res, next) {
-	//console.log(req);
     console.log("In isAuthenticated")
     if (req.user) {
         //console.log("req.session:",req.session);
@@ -191,7 +183,6 @@ function isAuthenticated(req, res, next) {
         next();
     } else {
         res.redirect('/login.html');
-        // Browser to go to login page
     }
 }
 
@@ -211,9 +202,6 @@ function gotProfile(accessToken, refreshToken, profile, done) {
     // and to store him in DB if not already there. 
     // Second arg to "done" will be passed into serializeUser,
     // should be key to get user out of database.
-    // console.log("first_name: ", first_name);
-    // console.log("last_name: ", last_name);
-    // console.log("UserID: ", userId); 
 
     let localUserCMD = "SELECT * FROM Users WHERE id = " + userId +";";
     DB.get(localUserCMD, userCallback);
@@ -253,8 +241,6 @@ passport.serializeUser((dbID, done) => {
  * and can be used by subsequent middleware.
  */
 passport.deserializeUser((dbID, done) => {
-	console.log("In deserialize user. ID: ", dbID);
-	console.log();
     let findUserCMD = 'SELECT * FROM Users WHERE id = '
     let localUserCMD = findUserCMD + dbID;
     let userData = {
@@ -262,7 +248,6 @@ passport.deserializeUser((dbID, done) => {
         first_name: "fName",
         last_name: "lName"
     };
-    console.log("About to get DB")
     DB.get(localUserCMD, (err, row) => {
         if(err) {
             return console.error("error: ", err);
@@ -276,12 +261,12 @@ passport.deserializeUser((dbID, done) => {
                 last_name: row.last_name
             };
             //were not in here
+            console.log("DONE: ", userData);
             done(null, userData);
         }
     });
     console.log("Do I make it here");
     //done(null, userData);
-
 });
 
 function printURL (req, res, next) {
@@ -290,11 +275,27 @@ function printURL (req, res, next) {
 }
 
 /**************************Handlers***********************************/
+function fetchNameHandler(req, res, next) {
+    if (req) {
+        let responseObj = {
+            first_name: req.user.first_name
+        };
+        res.json(responseObj);
+    } else {
+        next();
+    }
+}
+
+function testDB(req, res, next) {
+    console.log("Testing")
+    dumpDB();
+    res.json({done: true});
+}
+
 function translateHandler(req, res, next) {
     let queryObject = req.query;
-    console.log("translateHandler: Object: ", queryObject);
     let url = process.env.API_URL + process.env.API_KEY
-    console.log(url);
+
     if(queryObject.english != undefined) {
         let word = queryObject.english;
         let requestObj = {
@@ -302,7 +303,6 @@ function translateHandler(req, res, next) {
             "target": "ja",
             "q": [word]
         };
-        console.log("English Phrase: ", requestObj.q[0]);
 
         APIRequest(
             {
@@ -378,26 +378,31 @@ function alreadyLoggedIn(req, res, next) {
 
 function getCards(req, res, next) {
     if(req) {
-        let command = 'SELECT * FROM FlashCards';
-        //eventuall filter by userID
+        let command = 'SELECT * FROM FlashCards WHERE user_id = ';
+        command = command + req.user.id;
+        console.log("Command: ", command);
         DB.all(command, getCardsCallback);
-        // let resObject = {
-        //     firstName: req.user.firstName;
-        // };
 
+        let responseObj = {
+            firist_name: req.user.first_name
+        };
+        console.log("ResObject: ", responseObj);
         function getCardsCallback(err, rowData) {
             if(err) {
                 console.log("Error::getCards:: ", err);
             } else {
-                console.log("Data: ", rowData);
-                let resObject = {
-                    Data: rowData
-                };
-                res.json(resObject);
+                responseObj.Data = rowData;
+                res.json(responseObj);
             }
         }
     } else {
         next();
     }
+}
 
+function fileNotFound(req, res) {
+    let url = req.url;
+    res.type('text/plain');
+    res.status(404);
+    res.send("Cannot find " + url);
 }
