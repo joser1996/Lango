@@ -1,4 +1,4 @@
-"use strict";
+
 
 function logo(props) {
     return(
@@ -38,6 +38,7 @@ function SaveButton(props) {
 }
 
 function LangoFooter(props) {
+
     return(
         <footer>
             <p id="langoUser">Big Chungus</p>

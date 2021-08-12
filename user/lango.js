@@ -1,4 +1,4 @@
-"use strict";
+
 
 function logo(props) {
     return React.createElement(
@@ -54,6 +54,7 @@ function SaveButton(props) {
 }
 
 function LangoFooter(props) {
+
     return React.createElement(
         "footer",
         null,

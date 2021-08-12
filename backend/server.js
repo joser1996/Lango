@@ -167,7 +167,7 @@ app.get('/user/store', storeHandler);
 
 app.get('/user/fetch-cards', getCards);
 
-app.get('user/getName', fetchNameHandler);
+app.get('/user/getName', fetchNameHandler);
 
 app.get('/test', testDB);
 
